@@ -1,0 +1,14 @@
+# Cargo aliases for local development.
+# Run any of these with `cargo <alias>`, e.g. `cargo lint`.
+# List all available aliases with `cargo --list`.
+#
+# Note: cargo aliases can only invoke cargo subcommands, not arbitrary shell,
+# so a combined "run everything" alias isn't possible here. For the full
+# check suite locally, use the pre-commit hooks (`pre-commit run --all-files`)
+# or run the three commands below in sequence.
+
+[alias]
+# Lint with clippy, treating all warnings as errors (same as CI).
+lint = "clippy --all-targets --all-features -- -D warnings"
+# Check formatting without modifying files.
+fmt-check = "fmt --all --check"

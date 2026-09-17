@@ -1,0 +1,27 @@
+[package]
+name = "rust-template"
+version = "0.1.0"
+edition = "2024"
+description = "Rust project template with modern defaults: cargo, rustfmt, clippy, pre-commit, GitHub Actions"
+readme = "README.md"
+license = "MIT"
+
+[lib]
+name = "rust_template"
+path = "src/lib.rs"
+
+[[bin]]
+name = "rust-template"
+path = "src/main.rs"
+
+[dependencies]
+
+[dev-dependencies]
+
+[lints.rust]
+unsafe_code = "forbid"
+missing_debug_implementations = "warn"
+
+[lints.clippy]
+all = { level = "warn", priority = -1 }
+pedantic = { level = "warn", priority = -1 }

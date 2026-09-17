@@ -1,0 +1,21 @@
+services:
+  # Development container: mounts the source, caches build artifacts in a
+  # named volume, and drops you into a shell with the full toolchain.
+  # Usage: docker compose run --rm dev
+  dev:
+    image: rust:1-slim
+    working_dir: /app
+    volumes:
+      - .:/app
+      - cargo-target:/app/target
+      - cargo-registry:/usr/local/cargo/registry
+    command: bash
+
+  # Production image built from the Dockerfile.
+  # Usage: docker compose run --rm app
+  app:
+    build: .
+
+volumes:
+  cargo-target:
+  cargo-registry:
