@@ -62,14 +62,31 @@ make docker-run          # Build and run the production image
 The Makefile intentionally covers only Docker tasks; local development is all
 `cargo` (Option 1).
 
+## Contributing
+
+`main` is protected — all changes go through a pull request from a feature branch.
+
+1. Branch: `git checkout -b feat/my-change`
+2. Commit using [Conventional Commits](https://www.conventionalcommits.org/)
+   (`feat:`, `fix:`, `docs:`, `chore(deps):`, …). The `commit-msg` pre-commit
+   hook validates this locally, and CI validates the PR title.
+3. Open a PR. Required checks: format, lint, test, Docker build, security audit,
+   and conventional PR title.
+
+```bash
+pre-commit install   # installs both pre-commit and commit-msg hooks
+```
+
 ## Tools
 
 - **cargo** — Build, dependency management, and test runner (aliases in `.cargo/config.toml`)
 - **rustfmt** — Formatting (config in `rustfmt.toml`)
 - **clippy** — Linting (lints in `Cargo.toml`)
-- **pre-commit** — Git hooks (format check, lint, tests)
+- **pre-commit** — Git hooks (format check, lint, tests, conventional commit message)
 - **GitHub Actions** — PR checks (same as pre-commit)
 - **Docker** — Multi-stage build + Compose dev container, driven via `Makefile`
+- **cargo-audit / cargo-deny** — Dependency vulnerability, license, and supply-chain checks (`deny.toml`)
+- **Dependabot** — Automated dependency + action updates (`.github/dependabot.yml`)
 
 ## Project Structure
 
@@ -79,7 +96,9 @@ src/main.rs            # Binary crate
 tests/                 # Integration tests
 .cargo/config.toml     # Cargo aliases (local workflow)
 Makefile               # Docker task shortcuts (Docker workflow)
-.github/workflows/     # CI
+deny.toml              # cargo-deny supply-chain policy
+.github/workflows/     # CI (checks, Docker, security, commit lint)
+.github/dependabot.yml # Dependency update automation
 AGENTS.md              # Agent instructions (canonical)
 CLAUDE.md              # Pointer to AGENTS.md (Claude Code)
 .github/copilot-instructions.md  # Pointer to AGENTS.md (Copilot)
