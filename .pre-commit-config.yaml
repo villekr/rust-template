@@ -1,4 +1,14 @@
+# Install with: pre-commit install  (wires up both pre-commit and commit-msg hooks)
+default_install_hook_types: [pre-commit, commit-msg]
+
 repos:
+  - repo: https://github.com/commitizen-tools/commitizen
+    rev: v3.29.1
+    hooks:
+      - id: commitizen
+        name: conventional commit check
+        stages: [commit-msg]
+
   - repo: local
     hooks:
       - id: cargo-fmt
