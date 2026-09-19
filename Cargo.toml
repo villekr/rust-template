@@ -25,3 +25,11 @@ missing_debug_implementations = "warn"
 [lints.clippy]
 all = { level = "warn", priority = -1 }
 pedantic = { level = "warn", priority = -1 }
+
+[profile.release]
+# Smaller, faster release binaries. lto = "thin" balances build time and
+# runtime perf; codegen-units = 1 maximizes optimization; strip removes symbols.
+lto = "thin"
+codegen-units = 1
+strip = "symbols"
+# panic = "abort"  # opt in if you don't need unwinding (smaller binary, no catch_unwind)

@@ -46,6 +46,15 @@ check + lint + tests, same as CI), use the pre-commit hooks:
 pre-commit run --all-files
 ```
 
+Coverage & extra correctness (opt-in — CI runs coverage automatically):
+
+```bash
+cargo install cargo-llvm-cov          # one-time
+cargo llvm-cov --all-features         # line/region coverage report
+cargo test --doc                      # run documentation tests
+cargo install cargo-mutants && cargo mutants   # mutation testing (finds weak tests)
+```
+
 ### Option 2 — Docker (no local toolchain)
 
 Use this if you don't have (or don't want) Rust installed locally. A `Makefile`
@@ -88,6 +97,7 @@ pre-commit install   # installs both pre-commit and commit-msg hooks
 - **GitHub Actions** — PR checks (same as pre-commit)
 - **Docker** — Multi-stage build + Compose dev container, driven via `Makefile`
 - **cargo-audit / cargo-deny** — Dependency vulnerability, license, and supply-chain checks (`deny.toml`)
+- **cargo-llvm-cov** — Code coverage in CI (report-only; LCOV artifact + PR summary)
 - **Dependabot** — Automated dependency + action updates (`.github/dependabot.yml`)
 
 ## Project Structure
