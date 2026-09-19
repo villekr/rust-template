@@ -131,6 +131,10 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      # gitleaks-action lists the PR's commits via the GitHub API in
+      # pull_request mode (GET /repos/.../pulls/{n}/commits); without this it
+      # 403s ("Resource not accessible by integration") on private repos.
+      pull-requests: read
     steps:
       - uses: actions/checkout@v7
         with:
