@@ -98,6 +98,7 @@ pre-commit install   # installs both pre-commit and commit-msg hooks
 - **Docker** — Multi-stage build + Compose dev container, driven via `Makefile`
 - **cargo-audit / cargo-deny** — Dependency vulnerability, license, and supply-chain checks (`deny.toml`)
 - **cargo-llvm-cov** — Code coverage in CI (report-only; LCOV artifact + PR summary)
+- **OpenSSF Scorecard** — Supply-chain posture scoring (scheduled + on push to main)
 - **Dependabot** — Automated dependency + action updates (`.github/dependabot.yml`)
 
 ## Project Structure
@@ -109,9 +110,10 @@ tests/                 # Integration tests
 .cargo/config.toml     # Cargo aliases (local workflow)
 Makefile               # Docker task shortcuts (Docker workflow)
 deny.toml              # cargo-deny supply-chain policy
-.github/workflows/     # CI (checks, Docker, security, secret scan, workflow audit, commit lint)
+.github/workflows/     # CI (checks, Docker, security, secret scan, workflow audit, commit lint) + OpenSSF Scorecard
 .github/dependabot.yml # Dependency update automation
 .github/zizmor.yml     # zizmor (GitHub Actions audit) config
+SECURITY.md            # Vulnerability disclosure policy
 AGENTS.md              # Agent instructions (canonical)
 CLAUDE.md              # Pointer to AGENTS.md (Claude Code)
 .github/copilot-instructions.md  # Pointer to AGENTS.md (Copilot)
