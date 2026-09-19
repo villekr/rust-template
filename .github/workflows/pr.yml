@@ -8,12 +8,19 @@ on:
 env:
   CARGO_TERM_COLOR: always
 
+# Least privilege by default; jobs opt into more only if they need it.
+permissions: {}
+
 jobs:
   check:
     name: Format, lint and test
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
@@ -35,8 +42,12 @@ jobs:
   docker:
     name: Docker build
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - name: Build image
         run: docker build -t rust-template:ci .
@@ -44,8 +55,12 @@ jobs:
   security:
     name: Security audit
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - name: cargo-deny (advisories, bans, licenses, sources)
         uses: EmbarkStudios/cargo-deny-action@v2
