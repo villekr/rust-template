@@ -1,23 +1,30 @@
 # syntax=docker/dockerfile:1
 
 # ---- Build stage ----
-FROM rust:1-slim AS builder
+# Pinned by digest for reproducible builds; the tag is kept for readability and
+# so Dependabot (docker ecosystem) can propose digest bumps.
+FROM rust:1.90-slim@sha256:7fa728f3678acf5980d5db70960cf8491aff9411976789086676bdf0c19db39e AS builder
 WORKDIR /app
 
-# Cache dependencies separately from source for faster rebuilds.
-COPY Cargo.toml Cargo.lock ./
-RUN mkdir src \
-    && echo 'fn main() {}' > src/main.rs \
-    && echo '' > src/lib.rs \
-    && cargo build --release \
-    && rm -rf src
-
-# Build the real sources.
 COPY . .
-RUN touch src/main.rs src/lib.rs && cargo build --release
+
+# BuildKit cache mounts keep the cargo registry and target dir warm across
+# builds without leaking them into the final image. Because the target dir is
+# a cache mount (not persisted in the layer), copy the binary out to a stable
+# path within the same RUN step.
+RUN --mount=type=cache,target=/usr/local/cargo/registry \
+    --mount=type=cache,target=/app/target \
+    cargo build --release \
+    && cp /app/target/release/rust-template /usr/local/bin/rust-template
 
 # ---- Runtime stage ----
-FROM debian:bookworm-slim AS runtime
-WORKDIR /app
-COPY --from=builder /app/target/release/rust-template /usr/local/bin/rust-template
+FROM debian:bookworm-slim@sha256:3783cc01769c7b2b1b83a5c5ad96c815348e28ed7da68e2e3687004faa906251 AS runtime
+
+# Run as an unprivileged, non-root user.
+RUN groupadd --system --gid 10001 app \
+    && useradd --system --uid 10001 --gid app --no-create-home app
+
+COPY --from=builder /usr/local/bin/rust-template /usr/local/bin/rust-template
+
+USER app
 ENTRYPOINT ["rust-template"]
