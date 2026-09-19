@@ -71,7 +71,7 @@ The Makefile intentionally covers only Docker tasks; local development is all
    (`feat:`, `fix:`, `docs:`, `chore(deps):`, …). The `commit-msg` pre-commit
    hook validates this locally, and CI validates the PR title.
 3. Open a PR. Required checks: format, lint, test, Docker build, security audit,
-   and conventional PR title.
+   secret scan, workflow audit, and conventional PR title.
 
 ```bash
 pre-commit install   # installs both pre-commit and commit-msg hooks
@@ -82,7 +82,9 @@ pre-commit install   # installs both pre-commit and commit-msg hooks
 - **cargo** — Build, dependency management, and test runner (aliases in `.cargo/config.toml`)
 - **rustfmt** — Formatting (config in `rustfmt.toml`)
 - **clippy** — Linting (lints in `Cargo.toml`)
-- **pre-commit** — Git hooks (format check, lint, tests, conventional commit message)
+- **pre-commit** — Git hooks (format check, lint, tests, secret scan, workflow audit, conventional commit message)
+- **gitleaks** — Secret scanning (pre-commit + CI)
+- **zizmor** — GitHub Actions workflow security auditing (pre-commit + CI)
 - **GitHub Actions** — PR checks (same as pre-commit)
 - **Docker** — Multi-stage build + Compose dev container, driven via `Makefile`
 - **cargo-audit / cargo-deny** — Dependency vulnerability, license, and supply-chain checks (`deny.toml`)
@@ -97,8 +99,9 @@ tests/                 # Integration tests
 .cargo/config.toml     # Cargo aliases (local workflow)
 Makefile               # Docker task shortcuts (Docker workflow)
 deny.toml              # cargo-deny supply-chain policy
-.github/workflows/     # CI (checks, Docker, security, commit lint)
+.github/workflows/     # CI (checks, Docker, security, secret scan, workflow audit, commit lint)
 .github/dependabot.yml # Dependency update automation
+.github/zizmor.yml     # zizmor (GitHub Actions audit) config
 AGENTS.md              # Agent instructions (canonical)
 CLAUDE.md              # Pointer to AGENTS.md (Claude Code)
 .github/copilot-instructions.md  # Pointer to AGENTS.md (Copilot)

@@ -1,0 +1,10 @@
+# zizmor configuration — https://docs.zizmor.sh/configuration/
+#
+# Template policy: actions are pinned to version tags (e.g. @v7), not commit
+# SHAs. Tags keep the template readable and easy to keep current; hash-pinning
+# is left to downstream projects that want stricter supply-chain guarantees.
+rules:
+  unpinned-uses:
+    config:
+      policies:
+        "*": ref-pin
