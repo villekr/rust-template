@@ -40,7 +40,13 @@ cargo lint               # Clippy with warnings as errors (alias)
 ```
 
 Run `cargo --list` to see all aliases. To run the full check suite (format
-check + lint + tests, same as CI), use the pre-commit hooks:
+check + lint + tests + supply-chain audit, same as CI) in one command, use:
+
+```bash
+make check               # fmt check + clippy + test + cargo-deny (single entrypoint)
+```
+
+Or run the pre-commit hooks:
 
 ```bash
 pre-commit run --all-files
@@ -61,15 +67,16 @@ Use this if you don't have (or don't want) Rust installed locally. A `Makefile`
 wraps the verbose Docker commands into short targets.
 
 ```bash
-make                     # List available Docker targets
+make                     # List available targets
 make docker-check        # fmt check + lint + test in a dev container
 make docker-shell        # Interactive dev shell (source mounted, cache persisted)
 make docker-build        # Build the minimal production image
 make docker-run          # Build and run the production image
 ```
 
-The Makefile intentionally covers only Docker tasks; local development is all
-`cargo` (Option 1).
+The `docker-*` targets need only Docker; local development is all `cargo`
+(Option 1). The `Makefile` also provides `make check` (Option 1) as the single
+"run all checks" entrypoint.
 
 ## Contributing
 
@@ -107,7 +114,7 @@ src/lib.rs             # Library crate
 src/main.rs            # Binary crate
 tests/                 # Integration tests
 .cargo/config.toml     # Cargo aliases (local workflow)
-Makefile               # Docker task shortcuts (Docker workflow)
+Makefile               # `make check` (all checks) + Docker task shortcuts
 deny.toml              # cargo-deny supply-chain policy
 .github/workflows/     # CI (checks, Docker, security, secret scan, workflow audit, commit lint)
 .github/dependabot.yml # Dependency update automation
