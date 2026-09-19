@@ -1,18 +1,25 @@
-# Docker-based development and build tasks.
+# Development and build tasks.
 #
-# These wrap the verbose `docker compose` / `docker build` commands so you can
-# develop and build without a local Rust toolchain. If you have Rust installed
-# locally, prefer the `cargo` commands / aliases instead (see README).
+# `make check` is the single deterministic "run all checks" entrypoint (fmt +
+# clippy + test + cargo-deny) for local dev and AI agents. The `docker-*`
+# targets wrap the verbose `docker compose` / `docker build` commands so you can
+# develop and build without a local Rust toolchain.
 
 IMAGE ?= rust-template
 
 .DEFAULT_GOAL := help
 
-.PHONY: help docker-check docker-shell docker-build docker-run
+.PHONY: help check docker-check docker-shell docker-build docker-run
 
-help: ## List available Docker targets
+help: ## List available targets
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) \
 		| awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-14s\033[0m %s\n", $$1, $$2}'
+
+check: ## Run all checks: fmt, clippy, test, cargo-deny (single entrypoint)
+	cargo fmt --all --check
+	cargo clippy --all-targets --all-features -- -D warnings
+	cargo test --all-features
+	cargo deny check
 
 docker-check: ## Run fmt check, clippy, and tests in a dev container
 	docker compose run --rm dev bash -c "\
