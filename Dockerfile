@@ -3,7 +3,7 @@
 # ---- Build stage ----
 # Pinned by digest for reproducible builds; the tag is kept for readability and
 # so Dependabot (docker ecosystem) can propose digest bumps.
-FROM rust:1.90-slim@sha256:7fa728f3678acf5980d5db70960cf8491aff9411976789086676bdf0c19db39e AS builder
+FROM rust:1.97-slim@sha256:8e8cf8f7fd54a2d23d5a743b3a03f56e26b6c774276c33fa0595111704ebb15c AS builder
 WORKDIR /app
 
 COPY . .
